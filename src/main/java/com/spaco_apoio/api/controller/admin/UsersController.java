@@ -1,5 +1,6 @@
 package com.spaco_apoio.api.controller.admin;
 
+import com.spaco_apoio.api.rest.RestResetPassword;
 import com.spaco_apoio.api.rest.RestUsers;
 import com.spaco_apoio.api.rest.RestUsersProfile;
 import com.spaco_apoio.api.rest.RestUsersStatus;
@@ -35,6 +36,7 @@ public class UsersController {
         return usersService.getStatusList();
     }
 
+    //Test-only
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/listAll")
     public Collection<RestUsers> listAll(){
@@ -42,7 +44,7 @@ public class UsersController {
     }
 
     //Test-only
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/createUserAdmin")
     public void createUserAdmin(@RequestBody RestUsers rest){
         usersService.createUserAdmin(rest);
@@ -52,10 +54,39 @@ public class UsersController {
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/createPassword")
     public void createPassword(@RequestBody HashMap<String, String> body){
-        body.put("senderMail", env.getProperty("sendgrid.email"));
-        body.put("subject", env.getProperty("sendgrid.subject.create"));
-        body.put("content", env.getProperty("sendgrid.content.create"));
-        body.put("key", env.getProperty("sendgrid.key"));
         usersService.createPassword(body);
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping("/create")
+    public void create(@RequestBody RestUsers rest){
+        usersService.create(rest, getEmailPropertiesCreate());
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @PutMapping("/update")
+    public void update(@RequestBody RestUsers rest){
+        usersService.update(rest);
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @DeleteMapping("/delete/{userId}")
+    public void delete(@PathVariable String userId){
+        usersService.delete(userId);
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping("/updateUserPassword")
+    public void updateUserPassword(@RequestBody RestResetPassword rest){
+        usersService.insertNewPassword(rest);
+    }
+
+    private HashMap<String, String> getEmailPropertiesCreate(){
+        HashMap<String, String> props = new HashMap<>();
+        props.put("senderMail", env.getProperty("sendgrid.email"));
+        props.put("subject", env.getProperty("sendgrid.subject.create"));
+        props.put("content", env.getProperty("sendgrid.content.create"));
+        props.put("key", env.getProperty("sendgrid.key"));
+        return props;
     }
 }

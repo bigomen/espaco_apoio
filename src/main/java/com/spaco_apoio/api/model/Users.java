@@ -4,6 +4,7 @@ import com.spaco_apoio.api.mapper.UsersMapper;
 import com.spaco_apoio.api.rest.RestUsers;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Table(name = "USERS")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Users implements Serializable {
 
     @Serial
@@ -58,6 +60,17 @@ public class Users implements Serializable {
 
     @Column(name = "USE_RESET_TOKEN")
     private String resetToken;
+
+    public Users(Long id, String resetToken) {
+        this.id = id;
+        this.resetToken = resetToken;
+    }
+
+    public Users(LocalDate startDate, LocalDate endDate, String password) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.password = password;
+    }
 
     public RestUsers modelToRest(){
         return UsersMapper.INSTANCE.convertToRest(this);

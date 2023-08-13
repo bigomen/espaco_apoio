@@ -3,6 +3,8 @@ package com.spaco_apoio.api.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spaco_apoio.api.mapper.UsersMapper;
 import com.spaco_apoio.api.model.Users;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,12 +22,16 @@ public class RestUsers extends BaseRestModel implements Serializable {
     @JsonProperty(value = "id")
     private String id;
 
+    @NotEmpty(message = "Nome")
     @JsonProperty(value = "name")
     private String name;
 
+    @NotEmpty(message = "Email")
     @JsonProperty(value = "email")
+    @Email(message = "Email invalido")
     private String email;
 
+    @NotEmpty(message = "CPF")
     @JsonProperty(value = "cpf")
     private String cpf;
 
@@ -41,6 +47,7 @@ public class RestUsers extends BaseRestModel implements Serializable {
     @JsonProperty(value = "status")
     private RestUsersStatus status;
 
+    @NotEmpty(message = "Perfil")
     @JsonProperty(value = "profileId")
     private String profileId;
 

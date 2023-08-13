@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Immutable
+@NoArgsConstructor
 public class UsersStatus extends BaseModel implements Serializable {
 
     @Serial
@@ -29,6 +31,10 @@ public class UsersStatus extends BaseModel implements Serializable {
 
     @Column(name = "UST_DESCRIPTION")
     private String description;
+
+    public UsersStatus(Long id) {
+        this.id = id;
+    }
 
     public RestUsersStatus modelToRest(){
         return UsersStatusMapper.INSTANCE.convertToRest(this);
