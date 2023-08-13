@@ -6,17 +6,14 @@ import com.spaco_apoio.api.utility.UtilSecurity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {UtilSecurity.class, UsersStatusMapper.class, UsersProfileMapper.class})
-public interface UsersMapper {
+public interface UsersMapper extends IdMapper {
 
     UsersMapper INSTANCE = Mappers.getMapper(UsersMapper.class);
 
     @Mappings({
-            @Mapping(target = "status", ignore = true),
-            @Mapping(target = "profile", ignore = true),
             @Mapping(target = "profileId", qualifiedByName = "encryptId"),
             @Mapping(target = "statusId", qualifiedByName = "encryptId")
     })
@@ -24,12 +21,9 @@ public interface UsersMapper {
 
     @Mappings({
             @Mapping(target = "password", ignore = true),
-            @Mapping(target = "resetToken", ignore = true)
+            @Mapping(target = "resetToken", ignore = true),
+            @Mapping(target = "profileId", qualifiedByName = "decryptId"),
+            @Mapping(target = "statusId", qualifiedByName = "decryptId")
     })
     Users convertToModel(RestUsers restUsers);
-
-    @Named(value = "encryptId")
-    default String encryptId(Long id){
-        return UtilSecurity.encryptId(id);
-    }
 }

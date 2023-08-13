@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {UtilSecurity.class})
-public interface UsersProfileMapper {
+public interface UsersProfileMapper{
 
     UsersProfileMapper INSTANCE = Mappers.getMapper(UsersProfileMapper.class);
 

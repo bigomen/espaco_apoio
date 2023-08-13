@@ -26,11 +26,11 @@ public class UtilSecurity
 	private static final String BLOWFISH = "Blowfish";
 	private static String CRYPTO;
 	public static final String ANONYMOUS_USER = "anonymous_user000";
-	
+
 	@Value("${security.obfuscate_secret}")
-	private void setCrypto(String crypto)
+	private void setCrypto(String secret)
 	{
-		UtilSecurity.CRYPTO = crypto;
+		UtilSecurity.CRYPTO = secret;
 	}
 	
 	public static String encryptId(Long param)
