@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public interface UsersRepository extends CrudRepository<Users, Long> {
@@ -38,4 +39,7 @@ public interface UsersRepository extends CrudRepository<Users, Long> {
 
     @Query("select new Users(u.startDate, u.endDate, u.password) from Users u where u.id = :id")
     Users getUserDataUpdate(Long id);
+
+    @Query("select new Users(u.email, u.endDate, u.statusId, p.description, u.password) from Users u join u.profile p where u.email = :email")
+    Optional<Users> findByEmail(String email);
 }
