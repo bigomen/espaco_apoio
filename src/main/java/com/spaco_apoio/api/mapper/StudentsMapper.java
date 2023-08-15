@@ -2,6 +2,7 @@ package com.spaco_apoio.api.mapper;
 
 import com.spaco_apoio.api.model.Students;
 import com.spaco_apoio.api.rest.RestStudents;
+import com.spaco_apoio.api.utility.UtilSecurity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

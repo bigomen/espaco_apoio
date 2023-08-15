@@ -10,6 +10,7 @@ import com.spaco_apoio.api.repository.StudentsRepository;
 import com.spaco_apoio.api.repository.UsersRepository;
 import com.spaco_apoio.api.rest.RestStudents;
 import com.spaco_apoio.api.rest.params.StudentsParams;
+import com.spaco_apoio.api.utility.UtilSecurity;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

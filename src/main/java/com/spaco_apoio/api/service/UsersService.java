@@ -20,6 +20,7 @@ import com.spaco_apoio.api.rest.RestResetPassword;
 import com.spaco_apoio.api.rest.RestUsers;
 import com.spaco_apoio.api.rest.RestUsersProfile;
 import com.spaco_apoio.api.rest.RestUsersStatus;
+import com.spaco_apoio.api.utility.UtilSecurity;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

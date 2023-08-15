@@ -4,6 +4,7 @@ import com.spaco_apoio.api.model.Students;
 import com.spaco_apoio.api.model.Users;
 import com.spaco_apoio.api.model.UsersStatus;
 import com.spaco_apoio.api.rest.params.StudentsParams;
+import com.spaco_apoio.api.utility.UtilSecurity;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
