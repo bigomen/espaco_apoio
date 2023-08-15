@@ -7,6 +7,7 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import com.spaco_apoio.api.config.EmailConfig;
 import com.spaco_apoio.api.constants.Constants;
 import com.spaco_apoio.api.exceptions.InvalidData;
 import com.spaco_apoio.api.exceptions.NotFoundException;
@@ -19,7 +20,6 @@ import com.spaco_apoio.api.rest.RestResetPassword;
 import com.spaco_apoio.api.rest.RestUsers;
 import com.spaco_apoio.api.rest.RestUsersProfile;
 import com.spaco_apoio.api.rest.RestUsersStatus;
-import com.spaco_apoio.api.utility.UtilSecurity;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -44,6 +43,12 @@ public class UsersService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private static EmailConfig emailConfig;
+
+    public static void setEmailConfig(EmailConfig emailConfig) {
+        UsersService.emailConfig = emailConfig;
+    }
 
     public Collection<RestUsersProfile> getProfileList(){
         Collection<UsersProfile> profiles = usersRepository.getProfileList();
@@ -76,7 +81,7 @@ public class UsersService {
         usersRepository.save(model);
     }
 
-    public void create(RestUsers rest, HashMap<String, String> props){
+    public void create(RestUsers rest){
         if(usersRepository.existsByEmail(rest.getEmail())){
             throw new UniqueException(rest.getEmail());
         }
@@ -88,10 +93,7 @@ public class UsersService {
         model.setStatus(new UsersStatus(Constants.USER_STATUS_INACTIVE));
         model.setResetToken(RandomString.make(50));
         usersRepository.save(model);
-        props.put("token", model.getResetToken());
-        props.put("username", model.getName());
-        props.put("email", model.getEmail());
-        sendEmail(props);
+        createPasswordMail(model);
     }
 
     public void update(RestUsers rest){
@@ -130,23 +132,25 @@ public class UsersService {
         String encriptedPassword = bCryptPasswordEncoder.encode(rest.getPassword());
         usersRepository.updateUserPassword(encriptedPassword, user.getId(), Constants.USER_STATUS_ACTIVE);
     }
-
-    public void createPassword(HashMap<String, String> body){
-        sendEmail(body);
+    public static void createPasswordMail(Users user){
+        sendEmail(user, emailConfig.getSubjectCreate(), emailConfig.getContentCreate());
     }
 
-    public static void sendEmail(HashMap<String, String> body){
-        Email from = new Email(body.get("senderMail"));
-        String subject = body.get("subject");
+    public static void resetPasswordMail(Users user){
+        sendEmail(user, emailConfig.getSubjectReset(), emailConfig.getContentReset());
+    }
+
+    private static void sendEmail(Users user, String subject, String cont){
+        Email from = new Email(emailConfig.getEmail());
         Content content = new Content();
         content.setType("text/html");
-        content.setValue(body.get("content"));
-        content.setValue(content.getValue().replace("#usuario#", body.get("username")));
-        content.setValue(content.getValue().replace("#token#", body.get("token")));
-        Email to = new Email(body.get("email"));
+        content.setValue(cont);
+        content.setValue(content.getValue().replace("#usuario#",user.getName()));
+        content.setValue(content.getValue().replace("#token#", user.getResetToken()));
+        Email to = new Email(user.getEmail());
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid(body.get("key"));
+        SendGrid sg = new SendGrid(emailConfig.getKey());
         Request request = new Request();
         try {
             request.setMethod(Method.POST);

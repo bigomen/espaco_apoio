@@ -1,6 +1,5 @@
 package com.spaco_apoio.api.mapper;
 
-import com.spaco_apoio.api.utility.UtilSecurity;
 import org.mapstruct.Named;
 
 public interface IdMapper {

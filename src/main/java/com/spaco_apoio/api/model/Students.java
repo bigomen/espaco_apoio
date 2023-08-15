@@ -36,6 +36,33 @@ public class Students implements Serializable {
     @Column(name = "STU_BIRTH_DATE")
     private LocalDate birthDate;
 
+    public Students(Long id, String name, LocalDate startDate, LocalDate endDate, String statusDescription){
+        Users users = new Users();
+        users.setName(name);
+        users.setStartDate(startDate);
+        users.setEndDate(endDate);
+        UsersStatus status = new UsersStatus();
+        status.setDescription(statusDescription);
+        users.setStatus(status);
+        this.id = id;
+        this.user = users;
+    }
+
+    public Students(Long id, String comments, LocalDate birthDate, String name, String email, String cpf,
+                    LocalDate startDate, LocalDate endDate, Long statusId){
+        Users user = new Users();
+        user.setName(name);
+        user.setEmail(email);
+        user.setCpf(cpf);
+        user.setStartDate(startDate);
+        user.setEndDate(endDate);
+        user.setStatusId(statusId);
+        this.id = id;
+        this.comments = comments;
+        this.birthDate = birthDate;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

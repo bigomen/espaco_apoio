@@ -8,6 +8,6 @@ public class UniqueException extends RuntimeException{
     private static final long serialVersionUID = 1L;
 
     public UniqueException(String msg){
-        super(msg.concat(" já está na base de dados em outro registro!"));
+        super(msg.concat(" já está sendo usado por outro registro!"));
     }
 }

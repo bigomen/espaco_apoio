@@ -10,11 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/admin/users")
-public class UsersController extends EnvController{
+public class UsersController{
 
     @Autowired
     private UsersService usersService;
@@ -39,37 +38,37 @@ public class UsersController extends EnvController{
         return usersService.listAll();
     }
 
-    //Test-only
-    @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping("/createUserAdmin")
-    public void createUserAdmin(@RequestBody RestUsers rest){
-        usersService.createUserAdmin(rest);
-    }
+//    //Test-only
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @PostMapping("/createUserAdmin")
+//    public void createUserAdmin(@RequestBody RestUsers rest){
+//        usersService.createUserAdmin(rest);
+//    }
+//
+//    //Test-only
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @PostMapping("/createPassword")
+//    public void createPassword(@RequestBody HashMap<String, String> body){
+//        usersService.createPassword(body);
+//    }
 
-    //Test-only
-    @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping("/createPassword")
-    public void createPassword(@RequestBody HashMap<String, String> body){
-        usersService.createPassword(body);
-    }
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @PostMapping("/create")
+//    public void create(@RequestBody RestUsers rest){
+//        usersService.create(rest);
+//    }
+//
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @PutMapping("/update")
+//    public void update(@RequestBody RestUsers rest){
+//        usersService.update(rest);
+//    }
 
-    @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping("/create")
-    public void create(@RequestBody RestUsers rest){
-        usersService.create(rest, getEmailPropertiesCreate());
-    }
-
-    @ResponseStatus(value = HttpStatus.OK)
-    @PutMapping("/update")
-    public void update(@RequestBody RestUsers rest){
-        usersService.update(rest);
-    }
-
-    @ResponseStatus(value = HttpStatus.OK)
-    @DeleteMapping("/delete/{userId}")
-    public void delete(@PathVariable String userId){
-        usersService.delete(userId);
-    }
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @DeleteMapping("/delete/{userId}")
+//    public void delete(@PathVariable String userId){
+//        usersService.delete(userId);
+//    }
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping("/updateUserPassword")

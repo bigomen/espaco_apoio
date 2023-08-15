@@ -13,8 +13,8 @@ public class ApiExceptionHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(NotFoundException.class)
-    public HashMap<String, String> notFoundHandler(NotFoundException exception){
+    @ExceptionHandler({NotFoundException.class, InvalidData.class, UniqueException.class})
+    public HashMap<String, String> RuntimeHandler(RuntimeException exception){
         HashMap<String, String> restError = new HashMap<>();
         restError.put("error", exception.getMessage());
         return restError;

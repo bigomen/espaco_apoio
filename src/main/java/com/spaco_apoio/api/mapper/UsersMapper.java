@@ -2,7 +2,6 @@ package com.spaco_apoio.api.mapper;
 
 import com.spaco_apoio.api.model.Users;
 import com.spaco_apoio.api.rest.RestUsers;
-import com.spaco_apoio.api.utility.UtilSecurity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
