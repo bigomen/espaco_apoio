@@ -1,5 +1,6 @@
 package com.spaco_apoio.api.utility;
 
+import com.spaco_apoio.api.model.Users;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.crypto.RuntimeCryptoException;
@@ -45,7 +46,8 @@ public class UtilSecurity
 		
 		if (jwtAuth != null)
 		{
-			user = jwtAuth.getPrincipal().toString();
+			Users principal = (Users) jwtAuth.getPrincipal();
+			user = principal.getProfile().getDescription();
 		}
 
 		byte[] keyData = CRYPTO.getBytes();
@@ -76,7 +78,8 @@ public class UtilSecurity
 		
 		if (jwtAuth != null)
 		{
-			user = jwtAuth.getPrincipal().toString();
+			Users principal = (Users) jwtAuth.getPrincipal();
+			user = principal.getProfile().getDescription();
 		}
 
 		byte[] keyData = CRYPTO.getBytes();

@@ -135,7 +135,7 @@ public class UsersService {
         sendEmail(body);
     }
 
-    private static void sendEmail(HashMap<String, String> body){
+    public static void sendEmail(HashMap<String, String> body){
         Email from = new Email(body.get("senderMail"));
         String subject = body.get("subject");
         Content content = new Content();

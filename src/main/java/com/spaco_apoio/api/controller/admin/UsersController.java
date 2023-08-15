@@ -6,7 +6,6 @@ import com.spaco_apoio.api.rest.RestUsersProfile;
 import com.spaco_apoio.api.rest.RestUsersStatus;
 import com.spaco_apoio.api.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +14,10 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/admin/users")
-public class UsersController {
+public class UsersController extends EnvController{
 
     @Autowired
     private UsersService usersService;
-
-    @Autowired
-    private Environment env;
 
 
     @ResponseStatus(value = HttpStatus.OK)
@@ -81,12 +77,4 @@ public class UsersController {
         usersService.insertNewPassword(rest);
     }
 
-    private HashMap<String, String> getEmailPropertiesCreate(){
-        HashMap<String, String> props = new HashMap<>();
-        props.put("senderMail", env.getProperty("sendgrid.email"));
-        props.put("subject", env.getProperty("sendgrid.subject.create"));
-        props.put("content", env.getProperty("sendgrid.content.create"));
-        props.put("key", env.getProperty("sendgrid.key"));
-        return props;
-    }
 }
