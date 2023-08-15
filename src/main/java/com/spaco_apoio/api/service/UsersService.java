@@ -45,11 +45,8 @@ public class UsersService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private static EmailConfig emailConfig;
-
-    public static void setEmailConfig(EmailConfig emailConfig) {
-        UsersService.emailConfig = emailConfig;
-    }
+    @Autowired
+    private EmailConfig emailConfig;
 
     public Collection<RestUsersProfile> getProfileList(){
         Collection<UsersProfile> profiles = usersRepository.getProfileList();
@@ -94,7 +91,7 @@ public class UsersService {
         model.setStatus(new UsersStatus(Constants.USER_STATUS_INACTIVE));
         model.setResetToken(RandomString.make(50));
         usersRepository.save(model);
-        createPasswordMail(model);
+//        createPasswordMail(model);
     }
 
     public void update(RestUsers rest){
@@ -133,15 +130,15 @@ public class UsersService {
         String encriptedPassword = bCryptPasswordEncoder.encode(rest.getPassword());
         usersRepository.updateUserPassword(encriptedPassword, user.getId(), Constants.USER_STATUS_ACTIVE);
     }
-    public static void createPasswordMail(Users user){
+    public void createPasswordMail(Users user){
         sendEmail(user, emailConfig.getSubjectCreate(), emailConfig.getContentCreate());
     }
 
-    public static void resetPasswordMail(Users user){
+    public void resetPasswordMail(Users user){
         sendEmail(user, emailConfig.getSubjectReset(), emailConfig.getContentReset());
     }
 
-    private static void sendEmail(Users user, String subject, String cont){
+    private void sendEmail(Users user, String subject, String cont){
         Email from = new Email(emailConfig.getEmail());
         Content content = new Content();
         content.setType("text/html");

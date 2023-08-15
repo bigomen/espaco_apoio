@@ -27,6 +27,7 @@ public class StudentsRepositoryCustomImpl extends Repository<Students> implement
         Root<Students> root = criteria.from(getClazz());
         Root<Students> countRoot = count.from(getClazz());
         Collection<Predicate> predicates = new ArrayList<>();
+        Collection<Predicate> countpredicates = new ArrayList<>();
 
         Join<Students, Users> joinUsers = root.join("user");
         Join<Users, UsersStatus> joinStatus = joinUsers.join("status");
@@ -43,19 +44,23 @@ public class StudentsRepositoryCustomImpl extends Repository<Students> implement
 
         if(StringUtils.hasText(params.getName())){
             predicates.add(builder().like(builder().upper(name), like(params.getName().toUpperCase())));
+            countpredicates.add(builder().like(builder().upper(joinCountUsers.get("name")), like(params.getName().toUpperCase())));
         }
         if(Objects.nonNull(params.getStartDate())){
             predicates.add(builder().greaterThanOrEqualTo(startDate, params.getStartDate()));
+            countpredicates.add(builder().greaterThanOrEqualTo(joinCountUsers.get("startDate"), params.getStartDate()));
         }
         if(Objects.nonNull(params.getEndDate())){
             predicates.add(builder().lessThanOrEqualTo(endDate, params.getEndDate()));
+            countpredicates.add(builder().lessThanOrEqualTo(joinCountUsers.get("endDate"), params.getEndDate()));
         }
         if(StringUtils.hasText(params.getStatus())){
             predicates.add(builder().equal(joinStatus.get("id"), UtilSecurity.decryptId(params.getStatus())));
+            countpredicates.add(builder().equal(joinCountStatus.get("id"), UtilSecurity.decryptId(params.getStatus())));
         }
 
         count.select(builder().count(countRoot.get("id")));
-        count.where(predicates.toArray(new Predicate[0]));
+        count.where(countpredicates.toArray(new Predicate[0]));
         criteria.where(predicates.toArray(new Predicate[0]));
         criteria.orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder()));
         List<Students> studentsList = entityManager

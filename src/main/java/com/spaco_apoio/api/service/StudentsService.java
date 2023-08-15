@@ -1,17 +1,14 @@
 package com.spaco_apoio.api.service;
 
-import com.spaco_apoio.api.constants.Constants;
 import com.spaco_apoio.api.exceptions.InvalidData;
 import com.spaco_apoio.api.exceptions.NotFoundException;
 import com.spaco_apoio.api.exceptions.UniqueException;
 import com.spaco_apoio.api.model.Students;
-import com.spaco_apoio.api.model.Users;
 import com.spaco_apoio.api.repository.StudentsRepository;
 import com.spaco_apoio.api.repository.UsersRepository;
 import com.spaco_apoio.api.rest.RestStudents;
 import com.spaco_apoio.api.rest.params.StudentsParams;
 import com.spaco_apoio.api.utility.UtilSecurity;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +28,9 @@ public class StudentsService {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private UsersService usersService;
 
     public Page<RestStudents> list(StudentsParams params, Pageable pageable){
         Page<Students> students = studentsRepository.list(params, pageable);
@@ -54,14 +54,10 @@ public class StudentsService {
         if(usersRepository.existsByCpf(rest.getUser().getCpf())){
             throw new UniqueException(rest.getUser().getCpf());
         }
-        rest.getUser().setStartDate(LocalDate.now());
         Students model = rest.restToModel();
-        model.getUser().setStatusId(Constants.USER_STATUS_INACTIVE);
-        model.getUser().setProfileId(Constants.USER_PROFILE_STUDENT);
-        model.getUser().setResetToken(RandomString.make(50));
         studentsRepository.save(model);
 
-        UsersService.createPasswordMail(model.getUser());
+        usersService.createPasswordMail(model.getUser());
 
     }
 
@@ -76,12 +72,7 @@ public class StudentsService {
             throw new UniqueException(rest.getUser().getEmail());
         }
         if(usersRepository.existsByCpfUpdate(rest.getUser().getCpf(), id)) throw new UniqueException(rest.getUser().getCpf());
-        Users userDB = usersRepository.getUserDataUpdate(id);
         Students model = rest.restToModel();
-        model.getUser().setStartDate(userDB.getStartDate());
-        model.getUser().setEndDate(userDB.getEndDate());
-        model.getUser().setPassword(userDB.getPassword());
-        model.getUser().setProfileId(Constants.USER_PROFILE_STUDENT);
         model.getUser().setId(id);
         studentsRepository.save(model);
     }

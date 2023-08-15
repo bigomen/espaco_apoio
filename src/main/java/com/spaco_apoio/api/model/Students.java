@@ -1,11 +1,13 @@
 package com.spaco_apoio.api.model;
 
+import com.spaco_apoio.api.constants.Constants;
 import com.spaco_apoio.api.mapper.StudentsMapper;
 import com.spaco_apoio.api.rest.RestStudents;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.utility.RandomString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -61,6 +63,14 @@ public class Students implements Serializable {
         this.comments = comments;
         this.birthDate = birthDate;
         this.user = user;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.user.setProfileId(Constants.USER_PROFILE_STUDENT);
+        this.user.setStatusId(Constants.USER_STATUS_INACTIVE);
+        this.user.setStartDate(LocalDate.now());
+        this.user.setResetToken(RandomString.make(50));
     }
 
     public Long getId() {

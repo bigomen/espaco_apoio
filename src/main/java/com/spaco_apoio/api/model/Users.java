@@ -42,7 +42,7 @@ public class Users implements Serializable, UserDetails {
     @Column(name = "USE_CPF")
     private String cpf;
 
-    @Column(name = "USE_START_DATE")
+    @Column(name = "USE_START_DATE", updatable = false)
     private LocalDate startDate;
 
     @Column(name = "USE_END_DATE")
@@ -55,14 +55,14 @@ public class Users implements Serializable, UserDetails {
     @JoinColumn(name = "UST_ID", updatable = false, insertable = false)
     private UsersStatus status;
 
-    @Column(name = "UPR_ID")
+    @Column(name = "UPR_ID", updatable = false)
     private Long profileId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "UPR_ID", updatable = false, insertable = false)
     private UsersProfile profile;
 
-    @Column(name = "USE_PASSWORD")
+    @Column(name = "USE_PASSWORD", updatable = false)
     private String password;
 
     @Column(name = "USE_RESET_TOKEN")
